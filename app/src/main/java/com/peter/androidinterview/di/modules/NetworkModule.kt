@@ -1,5 +1,6 @@
 package com.peter.androidinterview.di.modules
 
+import com.peter.androidinterview.apis.Api
 import com.peter.androidinterview.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -44,5 +45,13 @@ object NetworkModule {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
         return retrofitBuilder.build()
+    }
+
+    /**
+     * Provide the [Api] which uses a [Retrofit] instance to make network calls
+     */
+    @Provides
+    fun providesApi(retrofit: Retrofit): Api{
+        return  retrofit.create(Api::class.java)
     }
 }
