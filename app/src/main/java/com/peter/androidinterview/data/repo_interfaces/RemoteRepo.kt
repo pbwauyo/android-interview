@@ -8,12 +8,4 @@ import com.peter.androidinterview.domain.models.*
 interface RemoteRepo {
     suspend fun fetchAllUsers(): List<User>
 
-    suspend fun fetchPostsByUser(userId: Int): List<Post>
-
-    suspend fun fetchCommentsByPost(postId: Int): List<Comment>
-
-    suspend fun fetchAlbumsByUser(userId: Int): List<Album>
-
-    suspend fun fetchPhotosByAlbum(albumId: Int): List<Photo>
-
 }

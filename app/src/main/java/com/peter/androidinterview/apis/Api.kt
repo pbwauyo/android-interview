@@ -20,26 +20,26 @@ interface Api {
      * Returns a list of [Post]
      */
     @GET("posts")
-    suspend fun fetchPostsByUser(@Query("userId") userId: Int): List<Post>
+    suspend fun fetchPostsByUser(@Query("userId") userId: Int, @Query("_start") start: Int, @Query("_limit") limit: Int): List<Post>
 
     /**
      * Fetch all comments on a specific post identified by the [postId] param
      * Returns a list of [Comment]
      */
     @GET("comments")
-    suspend fun fetchCommentsByPost(@Query("postId") postId: Int): List<Comment>
+    suspend fun fetchCommentsByPost(@Query("postId") postId: Int, @Query("_start") start: Int, @Query("_limit") limit: Int): List<Comment>
 
     /**
      * Fetch all albums of a specific user identified by the [userId] param.
      * Returns a list of [Album]
      */
     @GET("albums")
-    suspend fun fetchAlbumsByUser(@Query("userId") userId: Int): List<Album>
+    suspend fun fetchAlbumsByUser(@Query("userId") userId: Int, @Query("_start") start: Int, @Query("_limit") limit: Int): List<Album>
 
     /**
      * Fetch all photos in a specific album identified by the [albumId] param.
      * Returns a list of [Photo]
      */
     @GET("photos")
-    suspend fun fetchPhotosByAlbum(@Query("albumId") albumId: Int): List<Photo>
+    suspend fun fetchPhotosByAlbum(@Query("albumId") albumId: Int, @Query("_start") start: Int, @Query("_limit") limit: Int): List<Photo>
 }

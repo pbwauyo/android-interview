@@ -1,16 +1,27 @@
 package com.peter.androidinterview.presentation.viewmodels
 
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.peter.androidinterview.apis.Api
+import com.peter.androidinterview.data.pagingsource.AlbumsPagingSource
+import com.peter.androidinterview.data.pagingsource.CommentsPagingSource
+import com.peter.androidinterview.data.pagingsource.PhotosPagingSource
+import com.peter.androidinterview.data.pagingsource.PostsPagingSource
 import com.peter.androidinterview.data.repo_interfaces.RemoteRepo
-import com.peter.androidinterview.domain.models.Album
-import com.peter.androidinterview.domain.models.Photo
-import com.peter.androidinterview.domain.models.Post
-import com.peter.androidinterview.domain.models.User
+import com.peter.androidinterview.domain.models.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AppViewModel : ViewModel() {
     @Inject lateinit var remoteRepo: RemoteRepo
+    @Inject lateinit var api: Api
+
+    val pagingConfig = PagingConfig(
+        pageSize = 30
+    )
 
     private val _userIdLiveData = MutableLiveData<Int>()
     /**
@@ -44,42 +55,69 @@ class AppViewModel : ViewModel() {
     private var _postsLiveData = _userIdLiveData.switchMap {
         fetchPostsByUser(it)
     }
-    val postsLiveData: LiveData<List<Post>> get() = _postsLiveData
+    val postsLiveData: LiveData<PagingData<Post>> get() = _postsLiveData
 
-    private fun fetchPostsByUser(userId: Int): MutableLiveData<List<Post>>{
-        val postsLiveData = MutableLiveData<List<Post>>()
-        viewModelScope.launch {
-            postsLiveData.value = remoteRepo.fetchPostsByUser(userId)
-        }
+    private fun fetchPostsByUser(userId: Int): MutableLiveData<PagingData<Post>>{
+        val postsLiveData = MutableLiveData<PagingData<Post>>()
+        val postsPagingLiveData = Pager(
+            pagingConfig
+        ){
+            PostsPagingSource(api, userId)
+        }.liveData
+        postsLiveData.value = postsPagingLiveData.value
         return postsLiveData
     }
 
     //LiveData for albums
-    private var _albumsLiveData = MutableLiveData<List<Album>>()
-    val albumsLiveData = _userIdLiveData.switchMap {
+    private var _albumsLiveData = _userIdLiveData.switchMap {
         fetchAlbumsByUser(it)
     }
+    val albumsLiveData: LiveData<PagingData<Album>> get() = _albumsLiveData
 
-    private fun fetchAlbumsByUser(userId: Int): MutableLiveData<List<Album>>{
-        val albumsLiveData = MutableLiveData<List<Album>>()
-        viewModelScope.launch {
-            albumsLiveData.value = remoteRepo.fetchAlbumsByUser(userId)
-        }
+    private fun fetchAlbumsByUser(userId: Int): MutableLiveData<PagingData<Album>>{
+        val albumsLiveData = MutableLiveData<PagingData<Album>>()
+        val albumsPagingLiveData = Pager(
+            pagingConfig
+        ){
+            AlbumsPagingSource(api, userId)
+        }.liveData
+        albumsLiveData.value = albumsPagingLiveData.value
         return albumsLiveData
     }
 
     //LiveData for photos
-    private var _photosLiveData = MutableLiveData<List<Photo>>()
-    val photosLiveData = _userIdLiveData.switchMap {
+    private var _photosLiveData = _userIdLiveData.switchMap {
         fetchPhotosByAlbum(it)
     }
+    val photosLiveData: LiveData<PagingData<Photo>> get() = _photosLiveData
 
-    private fun fetchPhotosByAlbum(albumId: Int): MutableLiveData<List<Photo>>{
-        val albumsLiveData = MutableLiveData<List<Photo>>()
-        viewModelScope.launch {
-            albumsLiveData.value = remoteRepo.fetchPhotosByAlbum(albumId)
-        }
-        return albumsLiveData
+    private fun fetchPhotosByAlbum(albumId: Int): MutableLiveData<PagingData<Photo>>{
+        val photosLiveData = MutableLiveData<PagingData<Photo>>()
+        val photosPagingLiveData = Pager(
+            pagingConfig
+        ){
+            PhotosPagingSource(api, albumId)
+        }.liveData
+
+        photosLiveData.value = photosPagingLiveData.value
+        return photosLiveData
+    }
+
+    //LiveData for comments
+    private val _commentsLiveData = _postIdLiveData.switchMap {
+        fetchCommentsByPost(it)
+    }
+    val commentsLiveData: LiveData<PagingData<Comment>> get() = _commentsLiveData
+
+    private fun fetchCommentsByPost(postId: Int): MutableLiveData<PagingData<Comment>>{
+        val commentsLiveData = MutableLiveData<PagingData<Comment>>()
+        val commentsPagingLiveData = Pager(
+            pagingConfig
+        ){
+            CommentsPagingSource(api, postId)
+        }.liveData
+        commentsLiveData.value = commentsPagingLiveData.value
+        return commentsLiveData
     }
 
     /**

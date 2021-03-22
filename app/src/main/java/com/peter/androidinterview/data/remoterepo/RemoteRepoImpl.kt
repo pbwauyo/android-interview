@@ -18,46 +18,12 @@ import javax.inject.Inject
 class RemoteRepoImpl : RemoteRepo{
     @Inject lateinit var api: Api
 
-    private val disposables = CompositeDisposable()
-
     /**
      * Performs an api call to fetch all users.
      * Returns a list of users.
      */
     override suspend fun fetchAllUsers(): List<User> {
         return api.fetchAllUsers()
-    }
-
-    /**
-     * Performs an api call to fetch posts by a specific [User].
-     * Returns a list of posts.
-     */
-    override suspend fun fetchPostsByUser(userId: Int): List<Post> {
-        return api.fetchPostsByUser(userId)
-    }
-
-    /**
-     * Performs an api call to fetch all comments on a specific post.
-     * Returns a list of [Comment].
-     */
-    override suspend fun fetchCommentsByPost(postId: Int): List<Comment> {
-        return api.fetchCommentsByPost(postId)
-    }
-
-    /**
-     * Performs an api call to fetch all albums by a specific user.
-     * Returns a list of [Album].
-     */
-    override suspend fun fetchAlbumsByUser(userId: Int): List<Album> {
-        return api.fetchAlbumsByUser(userId)
-    }
-
-    /**
-     * Performs an api call to fetch all photos in a specific album.
-     * Returns a list of [Photo].
-     */
-    override suspend fun fetchPhotosByAlbum(albumId: Int): List<Photo> {
-        return fetchPhotosByAlbum(albumId)
     }
 
 }
