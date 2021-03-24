@@ -19,7 +19,7 @@ class AppViewModel : ViewModel() {
     @Inject lateinit var remoteRepo: RemoteRepo
     @Inject lateinit var api: Api
 
-    val pagingConfig = PagingConfig(
+    private val pagingConfig = PagingConfig(
         pageSize = 30
     )
 
