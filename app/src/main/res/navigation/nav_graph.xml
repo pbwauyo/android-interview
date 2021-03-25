@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/usersListFragment">
+
+    <fragment
+        android:id="@+id/usersListFragment"
+        android:name="com.peter.androidinterview.presentation.ui.UsersListFragment"
+        android:label="fragment_users_list"
+        tools:layout="@layout/fragment_users_list" >
+        <action
+            android:id="@+id/action_usersListFragment_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.peter.androidinterview.presentation.ui.UserDetailsFragment"
+        android:label="fragment_user_details"
+        tools:layout="@layout/fragment_user_details" >
+        <action
+            android:id="@+id/action_userDetailsFragment_to_postsListFragment"
+            app:destination="@id/postsListFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_albumsListFragment"
+            app:destination="@id/albumsListFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.peter.androidinterview.domain.models.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/postsListFragment"
+        android:name="com.peter.androidinterview.presentation.ui.PostsListFragment"
+        android:label="fragment_posts_list"
+        tools:layout="@layout/fragment_posts_list" >
+        <action
+            android:id="@+id/action_postsListFragment_to_commentsListFragment"
+            app:destination="@id/commentsListFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumsListFragment"
+        android:name="com.peter.androidinterview.presentation.ui.AlbumsListFragment"
+        android:label="fragment_albums_list"
+        tools:layout="@layout/fragment_albums_list" >
+        <action
+            android:id="@+id/action_albumsListFragment_to_photosListFragment"
+            app:destination="@id/photosListFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/photosListFragment"
+        android:name="com.peter.androidinterview.presentation.ui.PhotosListFragment"
+        android:label="fragment_photos_list"
+        tools:layout="@layout/fragment_photos_list" >
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsListFragment"
+        android:name="com.peter.androidinterview.presentation.ui.CommentsListFragment"
+        android:label="fragment_comments_list"
+        tools:layout="@layout/fragment_comments_list" >
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

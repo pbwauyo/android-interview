@@ -1,5 +1,6 @@
 package com.peter.androidinterview.di.modules
 
+import com.peter.androidinterview.apis.Api
 import com.peter.androidinterview.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import com.peter.androidinterview.di.App
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * Network module to provide a Retrofit instance into the [App] component.
@@ -25,9 +27,14 @@ object NetworkModule {
      */
     @Provides
     fun providesOkHttpClient(): OkHttpClient{
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         val clientBuilder = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(interceptor)
         return clientBuilder.build()
     }
 
@@ -44,5 +51,13 @@ object NetworkModule {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
         return retrofitBuilder.build()
+    }
+
+    /**
+     * Provide the [Api] which uses a [Retrofit] instance to make network calls
+     */
+    @Provides
+    fun providesApi(retrofit: Retrofit): Api{
+        return  retrofit.create(Api::class.java)
     }
 }
