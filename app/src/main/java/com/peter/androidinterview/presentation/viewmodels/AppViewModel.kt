@@ -14,23 +14,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AppViewModel @Inject constructor(val remoteRepo: RemoteRepo, val api: Api) : ViewModel() {
-
-    /**
-     * Configuration for the [PagingSource]
-     */
-    private val pagingConfig = PagingConfig(
-        pageSize = 30
-    )
+class AppViewModel @Inject constructor(private val remoteRepo: RemoteRepo) : ViewModel() {
 
     private val _userIdLiveData = MutableLiveData<Int>()
-    val userIdLiveData: LiveData<Int> get() = _userIdLiveData
 
     private val _postIdLiveData = MutableLiveData<Int>()
-    val postIdLiveData: LiveData<Int> get() = _postIdLiveData
 
     private val _albumIdLiveData = MutableLiveData<Int>()
-    val albumIdLiveData: LiveData<Int> get() = _albumIdLiveData
 
     //LiveData for users
     /**
@@ -46,62 +36,42 @@ class AppViewModel @Inject constructor(val remoteRepo: RemoteRepo, val api: Api)
 
     //LiveData for posts
     /**
-     * The [Pager] creates livedata by calling the load() method from the [PagingSource].
-     * The [pagingConfig] configures the parameters for the [PagingSource]
+     * Fetch a user's posts when the [_userIdLiveData]'s value changes
      */
     private var _postsLiveData = _userIdLiveData.switchMap {
-        Pager(
-            pagingConfig
-        ){
-            PostsPagingSource(api, it)
-        }.liveData.cachedIn(viewModelScope)
+        remoteRepo.fetchPostsByUser(it).cachedIn(viewModelScope)
     }
     val postsLiveData: LiveData<PagingData<Post>> get() = _postsLiveData
 
     //LiveData for albums
     /**
-     * The [Pager] creates livedata by calling the load() method from the [PagingSource].
-     * The [pagingConfig] configures the parameters for the [PagingSource]
+     * Fetch a user's albums when [_userIdLiveData]'s value changes
      */
     private var _albumsLiveData = _userIdLiveData.switchMap {
-        Pager(
-            pagingConfig
-        ){
-            AlbumsPagingSource(api, it)
-        }.liveData.cachedIn(viewModelScope)
+        remoteRepo.fetchAlbumsByUser(it).cachedIn(viewModelScope)
     }
     val albumsLiveData: LiveData<PagingData<Album>> get() = _albumsLiveData
 
     //LiveData for photos
     /**
-     * The [Pager] creates livedata by calling the load() method from the [PagingSource].
-     * The [pagingConfig] configures the parameters for the [PagingSource]
+     * Fetch the photos in an album when the [_albumIdLiveData]'s value changes
      */
     private var _photosLiveData = _albumIdLiveData.switchMap {
-        Pager(
-            pagingConfig
-        ){
-            PhotosPagingSource(api, it)
-        }.liveData.cachedIn(viewModelScope)
+        remoteRepo.fetchPhotosByUser(it).cachedIn(viewModelScope)
     }
     val photosLiveData: LiveData<PagingData<Photo>> get() = _photosLiveData
 
     //LiveData for comments
     /**
-     * The [Pager] creates livedata by calling the load() method from the [PagingSource].
-     * The [pagingConfig] configures the parameters for the [PagingSource]
+     * Fetch the comments on a post when the [_postIdLiveData]'s value changes
      */
     private val _commentsLiveData = _postIdLiveData.switchMap {
-        Pager(
-            pagingConfig
-        ){
-            CommentsPagingSource(api, it)
-        }.liveData.cachedIn(viewModelScope)
+        remoteRepo.fetchCommentsByPost(it).cachedIn(viewModelScope)
     }
     val commentsLiveData: LiveData<PagingData<Comment>> get() = _commentsLiveData
 
     /**
-     * Updates the [userIdLiveData] value only if there's a differing change
+     * Updates the [_userIdLiveData] value only if there's a differing change
      */
     fun updateUserId(newUserId: Int){
         if(newUserId != _userIdLiveData.value){
@@ -110,7 +80,7 @@ class AppViewModel @Inject constructor(val remoteRepo: RemoteRepo, val api: Api)
     }
 
     /**
-     * Updates the [postIdLiveData] value only if there's a differing change
+     * Updates the [_postIdLiveData] value only if there's a differing change
      */
     fun updatePostId(newPostId: Int){
         if(newPostId != _postIdLiveData.value){
@@ -119,7 +89,7 @@ class AppViewModel @Inject constructor(val remoteRepo: RemoteRepo, val api: Api)
     }
 
     /**
-     * Updates the [albumIdLiveData] value only if there's a differing change
+     * Updates the [_albumIdLiveData] value only if there's a differing change
      */
     fun updateAlbumId(newAlbumId: Int){
         if(newAlbumId != _albumIdLiveData.value){
