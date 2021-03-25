@@ -12,6 +12,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import com.peter.androidinterview.di.App
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * Network module to provide a Retrofit instance into the [App] component.
@@ -26,9 +27,14 @@ object NetworkModule {
      */
     @Provides
     fun providesOkHttpClient(): OkHttpClient{
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         val clientBuilder = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(interceptor)
         return clientBuilder.build()
     }
 

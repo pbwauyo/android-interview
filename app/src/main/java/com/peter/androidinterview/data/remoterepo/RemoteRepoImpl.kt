@@ -15,8 +15,7 @@ import javax.inject.Inject
  * An implementation of the [RemoteRepo] interface.
  * It uses an instance of [Api] to fetch data.
  */
-class RemoteRepoImpl : RemoteRepo{
-    @Inject lateinit var api: Api
+class RemoteRepoImpl @Inject constructor(val api: Api) : RemoteRepo{
 
     /**
      * Performs an api call to fetch all users.

@@ -26,7 +26,7 @@
             android:id="@+id/action_userDetailsFragment_to_albumsListFragment"
             app:destination="@id/albumsListFragment" />
         <argument
-            android:name="users"
+            android:name="user"
             app:argType="com.peter.androidinterview.domain.models.User" />
     </fragment>
     <fragment
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_postsListFragment_to_commentsListFragment"
             app:destination="@id/commentsListFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/albumsListFragment"
@@ -46,15 +49,26 @@
         <action
             android:id="@+id/action_albumsListFragment_to_photosListFragment"
             app:destination="@id/photosListFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/photosListFragment"
         android:name="com.peter.androidinterview.presentation.ui.PhotosListFragment"
         android:label="fragment_photos_list"
-        tools:layout="@layout/fragment_photos_list" />
+        tools:layout="@layout/fragment_photos_list" >
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/commentsListFragment"
         android:name="com.peter.androidinterview.presentation.ui.CommentsListFragment"
         android:label="fragment_comments_list"
-        tools:layout="@layout/fragment_comments_list" />
+        tools:layout="@layout/fragment_comments_list" >
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

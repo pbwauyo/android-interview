@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:contentPadding="6dp"
     app:cardCornerRadius="10dp"
-    android:elevation="6dp">
+    android:elevation="6dp"
+    android:layout_marginTop="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,6 +33,7 @@
             android:textSize="13sp"/>
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
