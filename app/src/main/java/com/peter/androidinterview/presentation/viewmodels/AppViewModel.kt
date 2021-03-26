@@ -1,5 +1,6 @@
 package com.peter.androidinterview.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.*
 import com.peter.androidinterview.apis.Api
@@ -9,6 +10,7 @@ import com.peter.androidinterview.data.pagingsource.PhotosPagingSource
 import com.peter.androidinterview.data.pagingsource.PostsPagingSource
 import com.peter.androidinterview.data.repo_interfaces.RemoteRepo
 import com.peter.androidinterview.domain.models.*
+import com.peter.androidinterview.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +23,9 @@ class AppViewModel @Inject constructor(private val remoteRepo: RemoteRepo) : Vie
     private val _postIdLiveData = MutableLiveData<Int>()
 
     private val _albumIdLiveData = MutableLiveData<Int>()
+
+    private val _addPostResponseLiveData = MutableLiveData<Event<String>>()
+    val addPostResponseLiveData: LiveData<Event<String>> get() = _addPostResponseLiveData
 
     //LiveData for users
     /**
@@ -69,6 +74,28 @@ class AppViewModel @Inject constructor(private val remoteRepo: RemoteRepo) : Vie
         remoteRepo.fetchCommentsByPost(it).cachedIn(viewModelScope)
     }
     val commentsLiveData: LiveData<PagingData<Comment>> get() = _commentsLiveData
+
+    /**
+     * Post new user
+     */
+    fun postNewPost(title: String, body: String){
+
+        if (title.trim().isNotBlank() && body.trim().isNotBlank()){
+            val post = Post(
+                userId = 1,
+                id = 2500,
+                title = title,
+                body = body
+            )
+            viewModelScope.launch {
+                val postResponse = remoteRepo.postNewPost(post)
+                _addPostResponseLiveData.postValue(Event("Post has been added successfully"))
+            }
+        }else {
+            _addPostResponseLiveData.value = Event("All fields are required")
+        }
+
+    }
 
     /**
      * Updates the [_userIdLiveData] value only if there's a differing change

@@ -19,4 +19,6 @@ interface RemoteRepo {
 
     fun fetchCommentsByPost(postId: Int): LiveData<PagingData<Comment>>
 
+    suspend fun postNewPost(post: Post): Post
+
 }

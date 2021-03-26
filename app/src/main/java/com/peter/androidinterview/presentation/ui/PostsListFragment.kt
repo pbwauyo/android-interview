@@ -53,6 +53,15 @@ class PostsListFragment : Fragment() {
         return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Navigation to AddPostFragment on FAB click
+        binding?.addPostFab?.setOnClickListener {
+            findNavController().navigate(R.id.action_postsListFragment_to_addPostFragment)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

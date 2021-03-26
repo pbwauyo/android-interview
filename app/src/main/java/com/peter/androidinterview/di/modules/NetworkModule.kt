@@ -1,5 +1,7 @@
 package com.peter.androidinterview.di.modules
 
+import android.content.Context
+import android.util.Log
 import com.peter.androidinterview.apis.Api
 import com.peter.androidinterview.utils.Constants
 import dagger.Module
@@ -60,4 +62,5 @@ object NetworkModule {
     fun providesApi(retrofit: Retrofit): Api{
         return  retrofit.create(Api::class.java)
     }
+
 }

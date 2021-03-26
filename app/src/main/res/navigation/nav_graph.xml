@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/usersListFragment"
         android:name="com.peter.androidinterview.presentation.ui.UsersListFragment"
-        android:label="fragment_users_list"
+        android:label="Users"
         tools:layout="@layout/fragment_users_list" >
         <action
             android:id="@+id/action_usersListFragment_to_userDetailsFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/userDetailsFragment"
         android:name="com.peter.androidinterview.presentation.ui.UserDetailsFragment"
-        android:label="fragment_user_details"
+        android:label="User Details"
         tools:layout="@layout/fragment_user_details" >
         <action
             android:id="@+id/action_userDetailsFragment_to_postsListFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/postsListFragment"
         android:name="com.peter.androidinterview.presentation.ui.PostsListFragment"
-        android:label="fragment_posts_list"
+        android:label="User Posts"
         tools:layout="@layout/fragment_posts_list" >
         <action
             android:id="@+id/action_postsListFragment_to_commentsListFragment"
@@ -40,11 +40,14 @@
         <argument
             android:name="userId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_postsListFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumsListFragment"
         android:name="com.peter.androidinterview.presentation.ui.AlbumsListFragment"
-        android:label="fragment_albums_list"
+        android:label="User Albums"
         tools:layout="@layout/fragment_albums_list" >
         <action
             android:id="@+id/action_albumsListFragment_to_photosListFragment"
@@ -56,7 +59,7 @@
     <fragment
         android:id="@+id/photosListFragment"
         android:name="com.peter.androidinterview.presentation.ui.PhotosListFragment"
-        android:label="fragment_photos_list"
+        android:label="Photos"
         tools:layout="@layout/fragment_photos_list" >
         <argument
             android:name="albumId"
@@ -65,10 +68,15 @@
     <fragment
         android:id="@+id/commentsListFragment"
         android:name="com.peter.androidinterview.presentation.ui.CommentsListFragment"
-        android:label="fragment_comments_list"
+        android:label="Comments"
         tools:layout="@layout/fragment_comments_list" >
         <argument
             android:name="postId"
             app:argType="integer" />
     </fragment>
+    <dialog
+        android:id="@+id/addPostFragment"
+        android:name="com.peter.androidinterview.presentation.ui.AddPostFragment"
+        android:label="Add Post"
+        tools:layout="@layout/fragment_add_post" />
 </navigation>

@@ -1,7 +1,9 @@
 package com.peter.androidinterview.apis
 
 import com.peter.androidinterview.domain.models.*
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -21,6 +23,14 @@ interface Api {
      */
     @GET("posts")
     suspend fun fetchPostsByUser(@Query("userId") userId: Int, @Query("_start") start: Int, @Query("_limit") limit: Int): List<Post>
+
+    /**
+     * Add New [Post].
+     * Return added Post as response.
+     * NOTE: [Post] will only be faked as added.
+     */
+    @POST("users")
+    suspend fun addNewPost(@Body post: Post): Post
 
     /**
      * Fetch all comments on a specific post identified by the [postId] param
